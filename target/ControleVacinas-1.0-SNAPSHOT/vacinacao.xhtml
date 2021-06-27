@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Vacinas do Paciente</title>
+    </h:head>
+    <h:body>
+        <h:form id="formPaciente" >
+            <p:growl showDetail="true" showSummary="true" />
+            <div align="center">
+            <h1>Vacinas do(a) #{vacinacaoBean.paciente.nome}</h1>
+            
+            <h:panelGrid id="painelPaciente" columns="4">
+                <p:outputLabel value="Nome"/>
+                <p:inputText disabled="true" value="#{vacinacaoBean.paciente.nome}"/>
+                
+                <p:outputLabel value="Data Nascimento"/>
+                <p:calendar disabled="true" value="#{vacinacaoBean.paciente.nascimento}" pattern="dd/MM/yyy"/>
+
+                <p:outputLabel value="Telefone"/>
+                <p:inputMask disabled="true" mask="(99)99999-9999" value="#{vacinacaoBean.paciente.telefone}"/>
+
+                <p:outputLabel value="Cartão SUS"/>
+                <p:inputText disabled="true" value="#{vacinacaoBean.paciente.sus}"/>
+                
+            </h:panelGrid>
+            
+            <br/>
+            <br/>
+
+            <h:panelGrid id="painelVacina" columns="2">
+                <f:facet name="header">
+                    <p:outputLabel value="Adicionar Vacina"/>
+                </f:facet>
+
+               <p:outputLabel value="Vacina"/>
+               <p:selectOneMenu value="#{vacinacaoBean.vacinacao.vacina}">
+                    <f:selectItem noSelectionOption="true" itemLabel="Selecione a Vacina"/>
+                    <f:selectItems value="#{vacinaBean.vacinas}" var="v" itemLabel="#{v.nome}" itemValue="#{v}"/>
+                </p:selectOneMenu>
+               
+                <p:outputLabel value="Lote"/>
+                <p:inputText value="#{vacinacaoBean.vacinacao.lote}"/>
+                
+                <p:outputLabel value="Enfermeiro"/>
+                <p:selectOneMenu value="#{vacinacaoBean.vacinacao.enfermeiro}">
+                    <f:selectItem noSelectionOption="true" itemLabel="Selecione o Enfermeiro"/>
+                    <f:selectItems value="#{enfermeiroBean.enfermeiros}" var="e" itemLabel="#{e.nome}" itemValue="#{e}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="Data"/>
+                <p:calendar value="#{vacinacaoBean.vacinacao.dataVacina}" pattern="dd/MM/yyyy"/>
+            </h:panelGrid>
+            
+            <br/>
+            <br/>
+            
+            <p:button outcome="/index.xhtml" value="Cancelar"/>
+            <p:commandButton action="#{vacinacaoBean.adicionar()}" value="Adicionar" ajax="false"/>
+            </div>
+            <br/>
+            <br/>
+            
+            <p:dataTable value="#{vacinacaoBean.paciente.vacinaList}" var="vn">
+                <p:column headerText="Vacina">
+                    <h:outputText value="#{vn.vacina.nome}"/>
+                </p:column>
+                
+                <p:column headerText="Lote">
+                    <h:outputText value="#{vn.lote}"/>
+                </p:column>
+                
+                <p:column headerText="Enfermeiro">
+                    <h:outputText value="#{vn.enfermeiro.nome}"/>
+                </p:column>
+
+                <p:column headerText="Data">
+                    <h:outputText value="#{vn.dataVacina}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Ações" >
+                    <p:commandButton value="Excluir" action="#{vacinacaoBean.excluir()}" update="@form">
+                        <f:setPropertyActionListener target="#{vacinacaoBean.vacina}" value="#{vn}" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>

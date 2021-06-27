@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Pacientes</title>
+    </h:head>
+    <h:body>
+        <h:form id="formPaciente">
+            <p:growl showDetail="true" showSummary="true" />
+            <div align="center">
+            <h1>Lista de Pacientes</h1>
+
+            <p:commandButton action="paciente.xhtml" value="Novo paciente"/>
+            <p:commandButton action="vacinas.xhtml" value="Listar vacinas"/>
+            </div>
+            <br/>
+            <br/>
+
+            <p:dataTable value="#{pacienteBean.pacientes}" var="p">
+                <p:column headerText="Nome" filterBy="#{p.nome}">
+                    <h:outputText value="#{p.nome}"/>
+                </p:column>
+
+                <p:column headerText="Data de Nascimento" >
+                    <h:outputText value="#{p.nascimento}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Telefone">
+                    <h:outputText value="#{p.telefone}"/>
+                </p:column>
+
+                <p:column headerText="Cartão SUS" >
+                    <h:outputText value="#{p.sus}"/>
+                </p:column>
+
+                <p:column headerText="Operações">
+                    <p:commandButton 
+                        value="Editar"
+                        action="/paciente.xhtml"
+                        ajax="false">
+                        <f:setPropertyActionListener target="#{pacienteBean.paciente}" value="#{p}"/>
+                    </p:commandButton>
+
+                    <p:commandButton 
+                        value="Vacinar"
+                        action="/vacinacao.xhtml"
+                        ajax="false">
+                        <f:param name="paciente" value="#{p.id}"/>
+                    </p:commandButton>
+
+                    <p:commandButton 
+                        value="Excluir"
+                        action="#{pacienteBean.excluir()}"
+                        ajax="false">
+                        <f:setPropertyActionListener target="#{pacienteBean.paciente}" value="#{p}"/>
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+        </h:form>
+    </h:body>
+</html>
